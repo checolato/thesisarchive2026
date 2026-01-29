@@ -8,6 +8,10 @@ export type GalleryProject = {
   category: string;
 };
 
+function formatCategory(label: string) {
+  return label.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
 export default function ProjectGalleryPage({
   projects,
   defaultCategory,
@@ -16,51 +20,44 @@ export default function ProjectGalleryPage({
   defaultCategory?: string;
 }) {
   const categories = useMemo(() => {
-    return Array.from(new Set(projects.map((p) => p.category)));
+    return Array.from(new Set(projects.map((p) => p.category))).filter(Boolean);
   }, [projects]);
 
-  const [activeCategory, setActiveCategory] = useState(
-    defaultCategory ?? categories[0]
-  );
+  const [activeCategory, setActiveCategory] = useState<string>("");
 
+  // Pick a valid category whenever data changes
   useEffect(() => {
-    if (defaultCategory) setActiveCategory(defaultCategory);
-  }, [defaultCategory]);
+    if (defaultCategory && categories.includes(defaultCategory)) {
+      setActiveCategory(defaultCategory);
+    } else if (categories.length > 0) {
+      setActiveCategory(categories[0]);
+    } else {
+      setActiveCategory("");
+    }
+  }, [defaultCategory, categories]);
 
-  const listFor = (cat: string) =>
-    projects.filter((p) => p.category === cat);
-  
-  function formatCategory(label: string) {
-  return label
-    .replace(/-/g, " ")                 // remove dashes
-    .replace(/\b\w/g, (c) => c.toUpperCase()); // capitalize words
-}
+  const listFor = (cat: string) => projects.filter((p) => p.category === cat);
 
   return (
     <div className="w-full">
-      {/* Header */}
-      <div className="w-full flex items-center px-10 justify-between">
+      <div className="w-full flex items-center justify-between">
         <div className="text-[64px] text-black/80">Index</div>
-
         <a
           href="/"
-          className="fixed z-50 right-[100px] top-[40px] text-[11px] uppercase tracking-[0.18em] text-black/60 hover:text-black transition"
+          className="text-[14px] text-black/50 hover:text-black transition"
         >
           Close
         </a>
       </div>
 
-      {/* Divider */}
-      <div className="w-full bg-black/40" />
+      <div className="w-full h-px bg-black/40" />
 
-      {/* Categories */}
-      <div className="w-full text-center ">
+      <div className="w-full text-center">
         {categories.map((cat, index) => {
           const isActive = cat === activeCategory;
 
           return (
             <div key={cat}>
-              {/* Category tab */}
               <button
                 onClick={() => setActiveCategory(cat)}
                 className={[
@@ -70,27 +67,19 @@ export default function ProjectGalleryPage({
                   index === 0 ? "border-t border-black/40" : "",
                   "border-b border-black/40",
                   "text-[64px]",
-                  "transition-colors duration-200",
-                  isActive
-                    ? "text-black"
-                    : "text-black/40 hover:text-black",
+                  "transition-colors",
+                  isActive ? "text-black" : "text-black/40 hover:text-black",
                 ].join(" ")}
               >
                 {formatCategory(cat)}
               </button>
 
-
-              {/* Project list */}
               {isActive &&
                 listFor(cat).map((p) => (
                   <a
                     key={p.slug}
                     href={`/projects/${p.slug}`}
-                    className={[
-                      "block text-[24px] text-black/40 hover:text-black transition text-center",
-                      index === 0 ? "border-t border-black/40" : "",
-                      "border-b border-black/80",
-                    ].join(" ")}
+                    className="block text-[32px] text-black/75 hover:text-black transition text-center"
                   >
                     {p.project_name}
                   </a>

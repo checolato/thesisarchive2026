@@ -1,35 +1,29 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import RippleBackground from "@/components/RippleBackground";
+import ProjectGalleryPage from "@/components/ProjectGalleryPage";
 import { getProjects } from "@/lib/loadProjects";
-import ProjectGalleryPage, { GalleryProject } from "@/components/ProjectGalleryPage";
-
 
 export default function IndexPage() {
-  const [projects, setProjects] = useState(() => getProjects().slice(0, 200));
+  const [projects, setProjects] = useState<any[]>([]);
 
   useEffect(() => {
-    setProjects(getProjects().slice(0, 200));
+    setProjects(getProjects());
   }, []);
 
-  // IMPORTANT: map these fields to match your data
-  const galleryProjects: GalleryProject[] = useMemo(() => {
-    return projects.map((p: any) => ({
-      slug: p.slug,
-      project_name: p.project_name,
-      category: p.category ?? "Category 1",
-    }));
+  const galleryProjects = useMemo(() => {
+    return projects
+      .filter((p: any) => p?.category && p?.slug && p?.project_name)
+      .map((p: any) => ({
+        slug: p.slug,
+        project_name: p.project_name,
+        category: p.category,
+      }));
   }, [projects]);
 
   return (
-    <>
-      <RippleBackground />
-
-      {/* page container */}
-      <main className="min-h-screen px-0 py-0 bg-white">
-        <ProjectGalleryPage projects={galleryProjects} defaultCategory="Category 1" />
-      </main>
-    </>
+    <main className="min-h-screen bg-white">
+      <ProjectGalleryPage projects={galleryProjects} />
+    </main>
   );
 }
