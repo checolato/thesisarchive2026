@@ -46,7 +46,7 @@ export default function ProjectGalleryPage({
           href="/"
           className="text-[14px] text-black/50 hover:text-black transition"
         >
-          Close
+          Back
         </a>
       </div>
 
