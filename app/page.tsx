@@ -25,14 +25,12 @@ export default function Home() {
 
       {/* Index tab — REAL PAGE NAVIGATION */}
       <Link
-        href="/app/index"
+        href="/"
         prefetch={false}
         className="fixed z-[9999] right-[100px] top-[40px] text-[11px] uppercase tracking-[0.18em] text-black/60 hover:text-black transition"
       >
         Index
       </Link>
-
-      <Link href="/index"></Link>
 
       {/* Scrollable world */}
       <main
