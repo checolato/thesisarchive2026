@@ -32,6 +32,8 @@ export default function Home() {
         Index
       </Link>
 
+      <Link href="/index"></Link>
+
       {/* Scrollable world */}
       <main
         className="relative"
