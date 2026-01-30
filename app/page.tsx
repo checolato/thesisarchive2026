@@ -25,7 +25,7 @@ export default function Home() {
 
       {/* Index tab — REAL PAGE NAVIGATION */}
       <Link
-        href="/index"
+        href="/app/index"
         prefetch={false}
         className="fixed z-[9999] right-[100px] top-[40px] text-[11px] uppercase tracking-[0.18em] text-black/60 hover:text-black transition"
       >
